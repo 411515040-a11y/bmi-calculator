@@ -1,10 +1,23 @@
 """
-Bilingual BMI (Body Mass Index) Calculator / Kalkulator IMT (Indeks Massa Tubuh)
-Languages: English & Bahasa Indonesia
+Multilingual BMI Calculator / Kalkulator IMT / BMI計算機
+Languages: English, Bahasa Indonesia, & 日本語 (Japanese)
 Supports both Imperial (English) units and Metric units.
 """
 
+import sys
 from typing import Tuple, Dict, Any
+
+# Ensure UTF-8 output encoding across Windows console environments
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+if hasattr(sys.stdin, "reconfigure"):
+    try:
+        sys.stdin.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
 
 TRANSLATIONS: Dict[str, Dict[str, Any]] = {
     "en": {
@@ -12,7 +25,7 @@ TRANSLATIONS: Dict[str, Dict[str, Any]] = {
         "menu_prompt": "Please choose an option:",
         "opt_imperial": "1) English / Imperial Units (Pounds, Feet & Inches)",
         "opt_metric": "2) Metric Units (Kilograms, Centimeters)",
-        "opt_change_lang": "3) Change Language / Ganti Bahasa",
+        "opt_change_lang": "3) Change Language / Ganti Bahasa / 言語を変更",
         "opt_exit": "4) Exit",
         "choice_prompt": "Enter your choice (1-4): ",
         "invalid_choice": "[!] Invalid selection. Please enter a number between 1 and 4.",
@@ -68,7 +81,7 @@ TRANSLATIONS: Dict[str, Dict[str, Any]] = {
         "menu_prompt": "Silakan pilih menu:",
         "opt_imperial": "1) Satuan Imperial / Inggris (Pound, Kaki & Inci)",
         "opt_metric": "2) Satuan Metrik (Kilogram, Sentimeter)",
-        "opt_change_lang": "3) Ganti Bahasa / Change Language",
+        "opt_change_lang": "3) Ganti Bahasa / Change Language / 言語を変更",
         "opt_exit": "4) Keluar",
         "choice_prompt": "Masukkan pilihan Anda (1-4): ",
         "invalid_choice": "[!] Pilihan tidak valid. Silakan masukkan angka antara 1 dan 4.",
@@ -118,6 +131,62 @@ TRANSLATIONS: Dict[str, Dict[str, Any]] = {
                 "advice": "IMT Anda masuk dalam kategori Obesitas Tingkat III. Harap segera konsultasikan dengan profesional medis."
             },
         }
+    },
+    "ja": {
+        "app_title": "BMI 計算機（体格指数）",
+        "menu_prompt": "オプションを選択してください:",
+        "opt_imperial": "1) ヤード・ポンド法（ポンド、フィート・インチ）",
+        "opt_metric": "2) メートル法（キログラム、センチメートル）",
+        "opt_change_lang": "3) 言語を変更 / Change Language / Ganti Bahasa",
+        "opt_exit": "4) 終了",
+        "choice_prompt": "選択肢を入力してください (1-4): ",
+        "invalid_choice": "[!] 選択が無効です。1から4の数値を入力してください。",
+        "imperial_header": "--- ヤード・ポンド法 ---",
+        "height_format_prompt": "身長の入力形式:\n  1) フィートとインチ（例: 5フィート 10インチ）\n  2) 合計インチ（例: 70インチ）\n形式を選択 [1 または 2, デフォルト: 1]: ",
+        "enter_total_inches": "合計身長をインチで入力してください: ",
+        "enter_feet": "身長 - フィート (feet) を入力してください: ",
+        "enter_inches_part": "身長 - インチ (inches) [0-11] を入力してください: ",
+        "invalid_inches_range": "  [!] インチは0から11.99の間で入力してください。",
+        "enter_weight_lbs": "体重をポンド (lbs) で入力してください: ",
+        "metric_header": "--- メートル法 ---",
+        "enter_height_cm": "身長をセンチメートル (cm) で入力してください: ",
+        "enter_weight_kg": "体重をキログラム (kg) で入力してください: ",
+        "error_positive": "  [!] 0より大きい正の数値を入力してください。",
+        "error_number": "  [!] 入力が無効です。有効な数値を入力してください。",
+        "report_title": "BMI 測定レポート",
+        "label_bmi": "あなたのBMI",
+        "label_category": "判定区分",
+        "label_healthy_range": "適正体重の範囲",
+        "label_note": "健康アドバイス",
+        "unit_lbs": "ポンド (lbs)",
+        "unit_kg": "kg",
+        "goodbye": "BMI計算機をご利用いただきありがとうございました。健康にお過ごしください！",
+        "categories": {
+            "underweight": {
+                "name": "低体重（痩せ型）",
+                "advice": "体重が適正範囲を下回っています。必要に応じて医師や管理栄養士にご相談の上、健康的に体重を増やすことをおすすめします。"
+            },
+            "normal": {
+                "name": "普通体重（標準）",
+                "advice": "身長に対して健康的な体重です。引き続きバランスの取れた食事と適度な運動を心がけましょう！"
+            },
+            "overweight": {
+                "name": "肥満（1度） / 過体重",
+                "advice": "標準体重をやや上回っています。適度な運動と食生活の見直しを検討してみてください。"
+            },
+            "obese_1": {
+                "name": "肥満（2度）",
+                "advice": "BMIが肥満2度に該当します。生活習慣の改善や専門医への相談をおすすめします。"
+            },
+            "obese_2": {
+                "name": "肥満（3度）",
+                "advice": "BMIが肥満3度に該当します。健康障害リスクを減らすため、医師の診察を強く推奨します。"
+            },
+            "obese_3": {
+                "name": "肥満（4度 / 高度肥満）",
+                "advice": "高度の肥満に該当します。医療機関を受診し、適切な治療・指導を受けることをおすすめします。"
+            },
+        }
     }
 }
 
@@ -146,7 +215,7 @@ def calculate_bmi_metric(weight_kg: float, height_cm: float) -> float:
 
 
 def get_bmi_category(bmi: float, lang: str = "en") -> Tuple[str, str]:
-    """Return the BMI category and advice according to selected language ('en' or 'id')."""
+    """Return the BMI category and advice according to selected language ('en', 'id', or 'ja')."""
     cats = TRANSLATIONS[lang]["categories"]
     if bmi < 18.5:
         data = cats["underweight"]
@@ -268,24 +337,27 @@ def run_metric_flow(lang: str):
 
 
 def choose_language() -> str:
-    """Prompt user to select English or Bahasa Indonesia."""
+    """Prompt user to select English, Bahasa Indonesia, or Japanese."""
     print("\n------------------------------------------------------------")
-    print(" Select Language / Pilih Bahasa:")
+    print(" Select Language / Pilih Bahasa / 言語を選択:")
     print("   1) English")
     print("   2) Bahasa Indonesia")
+    print("   3) 日本語 (Japanese)")
     print("------------------------------------------------------------")
     while True:
-        sel = input("Choice / Pilihan [1 or 2, default: 1]: ").strip()
+        sel = input("Choice / Pilihan / 選択 [1, 2, or 3, default: 1]: ").strip()
         if sel in ("1", ""):
             return "en"
         elif sel == "2":
             return "id"
-        print("[!] Please enter 1 for English or 2 for Bahasa Indonesia.")
+        elif sel == "3":
+            return "ja"
+        print("[!] Please enter 1 for English, 2 for Bahasa Indonesia, or 3 for Japanese.")
 
 
 def main():
     print("=" * 60)
-    print("  BMI CALCULATOR / KALKULATOR IMT (English & Indonesia)")
+    print("  BMI CALCULATOR / KALKULATOR IMT / BMI計算機")
     print("=" * 60)
 
     lang = choose_language()
